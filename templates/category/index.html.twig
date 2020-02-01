@@ -13,7 +13,7 @@
             </div>
         {% endfor %}
     {% endfor %}
-    <table class="table">
+    <table class="table" id="category_table">
         <thead class="thead-dark">
         <tr>
             <th scope="col">Nombre</th>
@@ -50,6 +50,7 @@
     {{ parent() }}
     <script>
         $(function () {
+            $('#category_table').DataTable();
             $('.destroy_category').click(function (e) {
                 e.preventDefault();
                 Swal.fire({

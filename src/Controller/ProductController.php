@@ -23,11 +23,14 @@ class ProductController extends AbstractController
 {
     /**
      * @Route("/", name="product")
+     * @param Request $request
+     * @param ProductRepository $productRepository
+     * @return Response
      */
     public function index(Request $request, ProductRepository $productRepository)
     {
         return $this->render('product/index.html.twig', [
-            'products' => $productRepository->findAll(),
+            'products' => $productRepository->findByCategoryActive(),
         ]);
     }
 
