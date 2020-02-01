@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Editar Producto{% endblock %}
+
+{% block body %}
+
+    <div class="container">
+        <h1>Actualizar Producto</h1>
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <input type="submit" value="Actualizar Producto">
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
