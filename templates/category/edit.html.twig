@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Actualizar Categoría{% endblock %}
+
+{% block body %}
+
+<div class="container">
+    <h1>Editar Categoría</h1>
+    <div class="row">
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <input type="submit" value="Actualizar">
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}
