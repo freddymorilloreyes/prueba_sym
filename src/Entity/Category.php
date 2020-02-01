@@ -4,9 +4,13 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CategoryRepository")
+ * @UniqueEntity("code")
+ * @UniqueEntity("name")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Category
 {
@@ -19,6 +23,7 @@ class Category
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Regex("/[\w]/")
      * @Assert\NotBlank
      */
     private $code;
@@ -26,9 +31,7 @@ class Category
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
-     * @Assert\Length(
-     *      min = 2,
-     * )
+     * @Assert\Length(min = 2)
      */
     private $name;
 
@@ -42,6 +45,16 @@ class Category
      * @ORM\Column(type="boolean")
      */
     private $active;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $createdAt;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $updatedAt;
 
     public function getId(): ?int
     {
@@ -94,5 +107,31 @@ class Category
         $this->active = $active;
 
         return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function setCreatedAt()
+    {
+        $this->createdAt = new \DateTime();
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+    /**
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    public function setUpdatedAt()
+    {
+        $this->updatedAt = new \DateTime();
     }
 }
