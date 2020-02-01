@@ -2,19 +2,17 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\CategoryRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\ProductRepository")
  * @UniqueEntity("code")
  * @UniqueEntity("name")
  * @ORM\HasLifecycleCallbacks()
  */
-class Category
+class Product
 {
     /**
      * @ORM\Id()
@@ -26,13 +24,14 @@ class Category
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
+     * @Assert\Length(min = 2, max = "10")
      */
     private $code;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
-     * @Assert\Length(min = 2)
+     * @Assert\Length(min = 4)
      */
     private $name;
 
@@ -43,9 +42,23 @@ class Category
     private $description;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
      */
-    private $active;
+    private $brand;
+
+    /**
+     * @ORM\Column(type="float")
+     * @Assert\NotBlank
+     * @Assert\Positive
+     */
+    private $price;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="products")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $category;
 
     /**
      * @ORM\Column(type="datetime")
@@ -56,16 +69,6 @@ class Category
      * @ORM\Column(type="datetime")
      */
     private $updatedAt;
-
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Product", mappedBy="category")
-     */
-    private $products;
-
-    public function __construct()
-    {
-        $this->products = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
@@ -108,14 +111,38 @@ class Category
         return $this;
     }
 
-    public function getActive(): ?bool
+    public function getBrand(): ?string
     {
-        return $this->active;
+        return $this->brand;
     }
 
-    public function setActive(bool $active): self
+    public function setBrand(string $brand): self
     {
-        $this->active = $active;
+        $this->brand = $brand;
+
+        return $this;
+    }
+
+    public function getPrice(): ?float
+    {
+        return $this->price;
+    }
+
+    public function setPrice(float $price): self
+    {
+        $this->price = $price;
+
+        return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): self
+    {
+        $this->category = $category;
 
         return $this;
     }
@@ -145,36 +172,5 @@ class Category
     public function setUpdatedAt()
     {
         $this->updatedAt = new \DateTime();
-    }
-
-    /**
-     * @return Collection|Product[]
-     */
-    public function getProducts(): Collection
-    {
-        return $this->products;
-    }
-
-    public function addProduct(Product $product): self
-    {
-        if (!$this->products->contains($product)) {
-            $this->products[] = $product;
-            $product->setCategory($this);
-        }
-
-        return $this;
-    }
-
-    public function removeProduct(Product $product): self
-    {
-        if ($this->products->contains($product)) {
-            $this->products->removeElement($product);
-            // set the owning side to null (unless already changed)
-            if ($product->getCategory() === $this) {
-                $product->setCategory(null);
-            }
-        }
-
-        return $this;
     }
 }
