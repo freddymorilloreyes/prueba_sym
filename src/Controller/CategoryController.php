@@ -95,4 +95,18 @@ class CategoryController extends AbstractController
         return $this->redirectToRoute('category');
     }
 
+    /**
+     * @Route("/{id}/toggle/state", name="category_toggle_state")
+     * @param Category $category
+     * @param CategoryUpdater $categoryUpdater
+     * @return RedirectResponse
+     */
+    public  function toggleState(Category $category, CategoryUpdater $categoryUpdater)
+    {
+        $category->setActive(!$category->getActive());
+        $categoryUpdater->update($category);
+        $this->addFlash('notice', 'Estado Modificado!');
+        return $this->redirectToRoute('category');
+    }
+
 }
