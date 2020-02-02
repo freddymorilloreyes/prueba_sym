@@ -9,10 +9,27 @@
     <a href="{{ path('product_new') }}">Agregar</a>
 
     <h3>Filtrar Productos</h3>
-    {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <input type="submit" value="Filtrar Productos">
-    {{ form_end(form) }}
+    <div class="m-4">
+        {{ form_start(form) }}
+            <div class="row">
+                <div class="col-md-6">
+                    {{ form_row(form.name) }}
+                </div>
+                <div class="col-md-6">
+                    {{ form_row(form.code) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    {{ form_row(form.brand) }}
+                </div>
+                <div class="col-md-6">
+                    {{ form_row(form.category) }}
+                </div>
+            </div>
+            <input type="submit" class="btn btn-primary btn-block" value="Filtrar Productos">
+        {{ form_end(form) }}
+    </div>
 
     {% for label, messages in app.flashes %}
         {% for message in messages %}
