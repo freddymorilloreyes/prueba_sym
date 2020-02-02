@@ -6,7 +6,7 @@
 
 <div class="container">
     <h1>Lista de Productos</h1>
-    <a href="{{ path('product_new') }}">Agregar</a>
+    <a class="btn btn-primary btn-sm" href="{{ path('product_new') }}">Añadir</a>
 
     <h3>Filtrar Productos</h3>
     <div class="m-4">
@@ -61,9 +61,9 @@
                 <td>{{ product.price }}</td>
                 <td>
                     {% if product.category.active %}
-                    <a href="{{ path('product_edit',{id:product.id}) }}">Editar</a>
+                    <a href="{{ path('product_edit',{id:product.id}) }}" class="btn btn-sm btn-warning">Editar</a>
                     {% endif %}
-                    <a href="{{ path('product_remove',{id:product.id}) }}" class="destroy_product">Eliminar</a>
+                    <a href="{{ path('product_remove',{id:product.id}) }}" class="btn btn-sm btn-danger destroy_product">Eliminar</a>
                 </td>
             </tr>
         {% endfor %}

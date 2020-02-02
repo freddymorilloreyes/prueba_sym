@@ -17,4 +17,6 @@ para instalar el proyecto
 
 7. carga los fixtures con php bin/console doctrine:fixtures:load
 
+(si deseas te puedes saltar el paso 6 y 7 importando las tablas a la base de datos que esta en la raiz del proyecto prueba_sym.sql)
+
 8. inicia el servidor con symfony server:start
