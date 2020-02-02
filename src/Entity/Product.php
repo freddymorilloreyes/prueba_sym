@@ -24,7 +24,12 @@ class Product
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
-     * @Assert\Length(min = 2, max = "10")
+     * @Assert\Length(min = 4, max = "10")
+     * @Assert\Regex(
+     *     pattern="/\W+/",
+     *     match=false,
+     *     message="El código no puede Contener caracteres especiales ni Espacios"
+     * )
      */
     private $code;
 

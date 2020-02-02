@@ -26,6 +26,11 @@ class Category
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
+     * @Assert\Regex(
+     *     pattern="/\W+/",
+     *     match=false,
+     *     message="El código no puede Contener caracteres especiales ni Espacios"
+     * )
      */
     private $code;
 
