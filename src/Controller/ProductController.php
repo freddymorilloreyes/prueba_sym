@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Product;
+use App\Form\ProductFilterType;
 use App\Form\ProductType;
 use App\Repository\ProductRepository;
 use App\Service\Product\ProductCreator;
@@ -29,8 +30,11 @@ class ProductController extends AbstractController
      */
     public function index(Request $request, ProductRepository $productRepository)
     {
+        $data = count($request->request->all())?$request->request->all()["product_filter"]:[];
+        $form = $this->createForm(ProductFilterType::class,$data);
         return $this->render('product/index.html.twig', [
-            'products' => $productRepository->findByCategoryActive(),
+            'form' => $form->createView(),
+            'products' => $productRepository->findByFilters($data),
         ]);
     }
 

@@ -20,19 +20,33 @@ class ProductRepository extends ServiceEntityRepository
         parent::__construct($registry, Product::class);
     }
 
-     /**
-      * @return Product[] Returns an array of Product objects
-      */
-    public function findByCategoryActive()
+    /**
+     * @param $data
+     * @return Product[] Returns an array of Product objects
+     */
+    public function findByFilters($data)
     {
-        return $this->createQueryBuilder('p')
+        $q = $this->createQueryBuilder('p')
             ->innerJoin(Category::class,'c')
             ->where('p.category = c.id')
             ->andWhere('c.active = 1')
-            ->orderBy('p.createdAt', 'ASC')
-            ->getQuery()
-            ->getResult()
+            ->orderBy('p.createdAt', 'ASC');
+            if (isset($data['name']) && $data['name'] != null) {
+                $q->andWhere('p.name like :name')
+                ->setParameter('name', '%'.$data['name'].'%');
+            }
+            if (isset($data['code']) && $data['code'] != null) {
+                $q->andWhere('p.code like :code')
+                ->setParameter('code', '%'.$data['code'].'%');
+            }
+            if (isset($data['category']) && $data['category'] != null) {
+                $q->andWhere('p.category = :category')
+                ->setParameter('category', $data['category']);
+            }
         ;
+        return $q
+            ->getQuery()
+            ->getResult();
     }
 
     /*

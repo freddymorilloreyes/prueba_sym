@@ -7,6 +7,12 @@
 <div class="container">
     <h1>Lista de Productos</h1>
     <a href="{{ path('product_new') }}">Agregar</a>
+
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <input type="submit" value="Filtrar Productos">
+    {{ form_end(form) }}
+
     {% for label, messages in app.flashes %}
         {% for message in messages %}
             <div class="alert alert-success" role="alert">

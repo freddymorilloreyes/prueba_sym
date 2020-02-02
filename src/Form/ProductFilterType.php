@@ -3,43 +3,34 @@
 namespace App\Form;
 
 use App\Entity\Category;
-use App\Entity\Product;
 use App\Repository\CategoryRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ProductType extends AbstractType
+class ProductFilterType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('code', TextType::class,[
-                'label' => 'Código',
-            ])
             ->add('name', TextType::class, [
                 'label' => 'Nombre',
+                'required' => false,
             ])
-            ->add('description', TextareaType::class, [
-                'label' => 'Descripción',
-            ])
-            ->add('brand', TextType::class, [
-                'label' => 'Marca',
-            ])
-            ->add('price', NumberType::class, [
-                'label' => 'Precio',
+            ->add('code', TextType::class, [
+                'label' => 'Código',
+                'required' => false,
             ])
             ->add('category', EntityType::class, [
+                'label' => 'Código',
                 'class' => Category::class,
                 'query_builder' => function(CategoryRepository $categoryRepository){
                     return $categoryRepository->findByState();
                 },
-                'label' => 'Categoría',
                 'choice_label' => 'name',
+                'required' => false,
             ])
         ;
     }
@@ -47,7 +38,7 @@ class ProductType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Product::class,
+            // Configure your form options here
         ]);
     }
 }
