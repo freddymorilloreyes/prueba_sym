@@ -8,6 +8,7 @@ use App\Repository\CategoryRepository;
 use App\Service\Category\CategoryCreator;
 use App\Service\Category\CategoryRemover;
 use App\Service\Category\CategoryUpdater;
+use App\Service\Category\Exception\CategoryDeleteException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -90,9 +91,14 @@ class CategoryController extends AbstractController
      */
     public function remove(Category $category, CategoryRemover $categoryRemover)
     {
-        $categoryRemover->destroy($category);
-        $this->addFlash('notice', 'Categoría Removida Con Éxito');
-        return $this->redirectToRoute('category');
+        try {
+            $categoryRemover->destroy($category);
+            $this->addFlash('notice', 'Categoría Removida Con Éxito');
+            return $this->redirectToRoute('category');
+        }catch (CategoryDeleteException $e) {
+            $this->addFlash('notice', 'No es posible eliminar esta Categoría');
+            return $this->redirectToRoute('category');
+        }
     }
 
     /**

@@ -5,6 +5,7 @@ namespace App\Service\Category;
 
 
 use App\Entity\Category;
+use App\Service\Category\Exception\CategoryDeleteException;
 use Doctrine\ORM\EntityManagerInterface;
 
 class CategoryRemover
@@ -21,6 +22,9 @@ class CategoryRemover
 
     public function destroy(Category $category)
     {
+        if (count($category->getProducts())) {
+            throw new CategoryDeleteException('No es posible eliminar esta Categoría pues Tiene Productos relacionados!');
+        }
         $this->entityManager->remove($category);
         $this->entityManager->flush();
     }
