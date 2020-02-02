@@ -39,6 +39,10 @@ class ProductRepository extends ServiceEntityRepository
                 $q->andWhere('p.code like :code')
                 ->setParameter('code', '%'.$data['code'].'%');
             }
+            if (isset($data['brand']) && $data['brand'] != null) {
+                $q->andWhere('p.brand like :brand')
+                ->setParameter('brand', '%'.$data['brand'].'%');
+            }
             if (isset($data['category']) && $data['category'] != null) {
                 $q->andWhere('p.category = :category')
                 ->setParameter('category', $data['category']);

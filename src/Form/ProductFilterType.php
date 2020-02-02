@@ -23,8 +23,12 @@ class ProductFilterType extends AbstractType
                 'label' => 'Código',
                 'required' => false,
             ])
+            ->add('brand', TextType::class, [
+                'label' => 'Marca',
+                'required' => false,
+            ])
             ->add('category', EntityType::class, [
-                'label' => 'Código',
+                'label' => 'Categoría',
                 'class' => Category::class,
                 'query_builder' => function(CategoryRepository $categoryRepository){
                     return $categoryRepository->findByState();

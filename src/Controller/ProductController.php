@@ -9,6 +9,7 @@ use App\Repository\ProductRepository;
 use App\Service\Product\ProductCreator;
 use App\Service\Product\ProductRemover;
 use App\Service\Product\ProductUpdater;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,18 +24,28 @@ use Symfony\Component\Routing\Annotation\Route;
 class ProductController extends AbstractController
 {
     /**
-     * @Route("/", name="product")
+     * @Route("/list/{page}", name="product")
      * @param Request $request
      * @param ProductRepository $productRepository
+     * @param PaginatorInterface $paginator
+     * @param int $page
      * @return Response
      */
-    public function index(Request $request, ProductRepository $productRepository)
+    public function index(Request $request, ProductRepository $productRepository,PaginatorInterface $paginator, int $page=1)
     {
         $data = count($request->request->all())?$request->request->all()["product_filter"]:[];
+
         $form = $this->createForm(ProductFilterType::class,$data);
+
+        $pagination = $paginator->paginate(
+            $productRepository->findByFilters($data),
+            $page,
+            10
+        );
+
         return $this->render('product/index.html.twig', [
             'form' => $form->createView(),
-            'products' => $productRepository->findByFilters($data),
+            'products' => $pagination,
         ]);
     }
 
